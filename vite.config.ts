@@ -6,6 +6,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
+    base: '/Credit-Card-Fraud-detection/',
     server: {
       port: 3000,
       host: '0.0.0.0',
