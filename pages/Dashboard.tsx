@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
 
     setTimeout(() => {
       let status: TransactionStatus = 'approved';
-      let reason = 'ML model confidence: 98.5%. Transaction pattern matches legitimate activity.';
+      let reason = 'Transaction pattern matches legitimate activity.';
 
       // Enhanced "ML" fraud detection rules
       const merchantLower = newTransactionData.merchant.toLowerCase();
@@ -77,19 +77,19 @@ const Dashboard: React.FC = () => {
       
       if (newTransactionData.amount > 5000) {
         status = 'fraudulent';
-        reason = 'ML model confidence: 94.2%. High-value transaction exceeds risk threshold. Flagged for potential fraud.';
+        reason = 'High-value transaction exceeds risk threshold. Flagged for potential fraud.';
       } else if (newTransactionData.amount > 1500) {
         status = 'in_review';
-        reason = 'ML model confidence: 76.8%. Elevated transaction amount requires manual verification by fraud analyst.';
+        reason = 'Elevated transaction amount requires manual verification by fraud analyst.';
       } else if (fraudKeywords.some(keyword => merchantLower.includes(keyword))) {
         status = 'fraudulent';
-        reason = `ML model confidence: 91.7%. Merchant "${newTransactionData.merchant}" matches high-risk merchant pattern in training data.`;
+        reason = `Merchant "${newTransactionData.merchant}" matches high-risk merchant pattern.`;
       } else if (suspiciousLocations.some(loc => locationLower.includes(loc))) {
         status = 'in_review';
-        reason = 'ML model confidence: 68.3%. Unusual location detected. Requires manual review.';
+        reason = 'Unusual location detected. Requires manual review.';
       } else if (newTransactionData.amount > 800) {
         status = 'in_review';
-        reason = 'ML model confidence: 72.5%. Transaction amount flagged for routine verification.';
+        reason = 'Transaction amount flagged for routine verification.';
       }
 
       const newTransaction: Transaction = {
