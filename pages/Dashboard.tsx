@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { UserRole, Transaction, TransactionStatus } from '../types';
 import AdminDashboard from './AdminDashboard';
@@ -30,10 +30,21 @@ const initialTransactions: Transaction[] = [
  */
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
-  const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
+  
+  // Initialize transactions from localStorage or use initial data
+  const [transactions, setTransactions] = useState<Transaction[]>(() => {
+    const saved = localStorage.getItem('transactions');
+    return saved ? JSON.parse(saved) : initialTransactions;
+  });
+  
   const [lastTransaction, setLastTransaction] = useState<Transaction | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Persist transactions to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+  }, [transactions]);
 
   // This should not happen if protected correctly, but provides a safe fallback.
   if (!user) {
