@@ -23,8 +23,23 @@ const Login: React.FC = () => {
       setError('Please enter both email and password.');
       return;
     }
-    // In a real app, you'd validate the password here.
-    // For this mock, we only care about the email.
+    
+    // Validate email and password
+    const validCredentials = [
+      { email: 'admin@company.com', password: 'DemoPassword123!' },
+      { email: 'employee@company.com', password: 'DemoPassword123!' },
+      { email: 'customer@example.com', password: 'DemoPassword123!' }
+    ];
+    
+    const isValid = validCredentials.some(
+      cred => cred.email === email && cred.password === password
+    );
+    
+    if (!isValid) {
+      setError('Invalid email or password. Please use one of the demo accounts above.');
+      return;
+    }
+    
     auth.login(email);
     navigate('/dashboard');
   };
