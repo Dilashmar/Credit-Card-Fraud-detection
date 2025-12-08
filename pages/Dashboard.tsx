@@ -7,10 +7,18 @@ import CustomerDashboard from './CustomerDashboard';
 
 // Pre-seeded data for demonstration purposes
 const initialTransactions: Transaction[] = [
-  { id: 'txn_1', amount: 125.50, merchant: 'Amazon', location: 'New York, NY', status: 'approved', reason: 'Common merchant, typical amount.', timestamp: new Date().toISOString() },
-  { id: 'txn_2', amount: 2500.00, merchant: 'RareGems Inc.', location: 'Miami, FL', status: 'fraudulent', reason: 'High-value transaction from a new, untrusted merchant.', timestamp: new Date().toISOString() },
-  { id: 'txn_3', amount: 7.25, merchant: 'Starbucks', location: 'Seattle, WA', status: 'approved', reason: 'Low-value, everyday purchase.', timestamp: new Date().toISOString() },
-  { id: 'txn_4', amount: 850.00, merchant: 'Electronics R Us', location: 'London, UK', status: 'in_review', reason: 'Unusual international transaction, requires manual verification.', timestamp: new Date().toISOString() },
+  { id: 'txn_1', amount: 125.50, merchant: 'Amazon', location: 'New York, NY', status: 'approved', reason: 'Common merchant, typical amount.', timestamp: new Date(Date.now() - 86400000 * 2).toISOString() },
+  { id: 'txn_2', amount: 2500.00, merchant: 'RareGems Inc.', location: 'Miami, FL', status: 'fraudulent', reason: 'High-value transaction from a new, untrusted merchant.', timestamp: new Date(Date.now() - 86400000 * 1).toISOString() },
+  { id: 'txn_3', amount: 7.25, merchant: 'Starbucks', location: 'Seattle, WA', status: 'approved', reason: 'Low-value, everyday purchase.', timestamp: new Date(Date.now() - 86400000 * 3).toISOString() },
+  { id: 'txn_4', amount: 850.00, merchant: 'Electronics R Us', location: 'London, UK', status: 'in_review', reason: 'Unusual international transaction, requires manual verification.', timestamp: new Date(Date.now() - 3600000 * 2).toISOString() },
+  { id: 'txn_5', amount: 45.00, merchant: 'Target', location: 'Chicago, IL', status: 'approved', reason: 'Regular retail purchase.', timestamp: new Date(Date.now() - 86400000 * 4).toISOString() },
+  { id: 'txn_6', amount: 1750.00, merchant: 'CryptoExchange Pro', location: 'Online', status: 'fraudulent', reason: 'High-risk merchant flagged as potential fraud.', timestamp: new Date(Date.now() - 86400000 * 1).toISOString() },
+  { id: 'txn_7', amount: 32.50, merchant: 'Uber', location: 'San Francisco, CA', status: 'approved', reason: 'Familiar service, normal amount.', timestamp: new Date(Date.now() - 3600000 * 12).toISOString() },
+  { id: 'txn_8', amount: 650.00, merchant: 'Best Buy', location: 'Austin, TX', status: 'in_review', reason: 'Moderate transaction amount requires manual review.', timestamp: new Date(Date.now() - 3600000 * 6).toISOString() },
+  { id: 'txn_9', amount: 15.00, merchant: 'Netflix', location: 'Los Angeles, CA', status: 'approved', reason: 'Recurring subscription payment.', timestamp: new Date(Date.now() - 86400000 * 5).toISOString() },
+  { id: 'txn_10', amount: 89.99, merchant: 'Walmart', location: 'Dallas, TX', status: 'approved', reason: 'Normal retail purchase.', timestamp: new Date(Date.now() - 86400000 * 2).toISOString() },
+  { id: 'txn_11', amount: 3200.00, merchant: 'Luxury Watches LLC', location: 'Paris, France', status: 'fraudulent', reason: 'High-value international luxury item flagged.', timestamp: new Date(Date.now() - 3600000 * 8).toISOString() },
+  { id: 'txn_12', amount: 22.75, merchant: 'Chipotle', location: 'Boston, MA', status: 'approved', reason: 'Common food purchase.', timestamp: new Date(Date.now() - 86400000 * 3).toISOString() },
 ];
 
 /**
@@ -93,6 +101,7 @@ const Dashboard: React.FC = () => {
             isLoading={isLoading}
             error={error}
             lastTransaction={lastTransaction}
+            allTransactions={transactions}
           />
         );
       default:
