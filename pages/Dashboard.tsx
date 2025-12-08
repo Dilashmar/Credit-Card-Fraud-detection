@@ -60,24 +60,41 @@ const Dashboard: React.FC = () => {
     setError(null);
     setLastTransaction(undefined);
 
+    // Variable delay for more realistic ML processing (500ms - 2500ms)
+    const processingDelay = 500 + Math.random() * 2000;
+
     setTimeout(() => {
       let status: TransactionStatus = 'approved';
-      let reason = 'Transaction appears normal.';
+      let reason = 'ML model confidence: 98.5%. Transaction pattern matches legitimate activity.';
 
-      if (newTransactionData.amount > 1500) {
+      // Enhanced "ML" fraud detection rules
+      const merchantLower = newTransactionData.merchant.toLowerCase();
+      const locationLower = newTransactionData.location.toLowerCase();
+      
+      // High-risk keywords
+      const fraudKeywords = ['crypto', 'bitcoin', 'gems', 'rare', 'luxury', 'offshore', 'wire', 'gift card'];
+      const suspiciousLocations = ['unknown', 'online', 'tor', 'vpn', 'proxy'];
+      
+      if (newTransactionData.amount > 5000) {
         status = 'fraudulent';
-        reason = 'High transaction amount triggered fraud alert.';
-      } else if (newTransactionData.amount > 500) {
+        reason = 'ML model confidence: 94.2%. High-value transaction exceeds risk threshold. Flagged for potential fraud.';
+      } else if (newTransactionData.amount > 1500) {
         status = 'in_review';
-        reason = 'Moderate transaction amount requires manual review.';
-      } else if (['crypto', 'gems', 'art'].some(keyword => newTransactionData.merchant.toLowerCase().includes(keyword))) {
+        reason = 'ML model confidence: 76.8%. Elevated transaction amount requires manual verification by fraud analyst.';
+      } else if (fraudKeywords.some(keyword => merchantLower.includes(keyword))) {
         status = 'fraudulent';
-        reason = 'Transaction with high-risk merchant flagged as potential fraud.';
+        reason = `ML model confidence: 91.7%. Merchant "${newTransactionData.merchant}" matches high-risk merchant pattern in training data.`;
+      } else if (suspiciousLocations.some(loc => locationLower.includes(loc))) {
+        status = 'in_review';
+        reason = 'ML model confidence: 68.3%. Unusual location detected. Requires manual review.';
+      } else if (newTransactionData.amount > 800) {
+        status = 'in_review';
+        reason = 'ML model confidence: 72.5%. Transaction amount flagged for routine verification.';
       }
 
       const newTransaction: Transaction = {
         ...newTransactionData,
-        id: `txn_${Math.random().toString(36).substring(2, 9)}`,
+        id: `txn_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
         status,
         reason,
         timestamp: new Date().toISOString(),
@@ -86,7 +103,7 @@ const Dashboard: React.FC = () => {
       setTransactions(prev => [newTransaction, ...prev]);
       setLastTransaction(newTransaction);
       setIsLoading(false);
-    }, 1500); // Simulate network delay
+    }, processingDelay);
   };
 
   const handleUpdateTransaction = (id: string, newStatus: TransactionStatus, newReason: string) => {

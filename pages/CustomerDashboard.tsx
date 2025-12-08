@@ -49,7 +49,40 @@ const TransactionForm: React.FC<{
             alert("Please fill all fields.");
             return;
         }
-        onSubmit({ amount: parseFloat(amount), merchant, location });
+        
+        const parsedAmount = parseFloat(amount);
+        
+        // Robust validation
+        if (isNaN(parsedAmount) || parsedAmount <= 0) {
+            alert("Please enter a valid positive amount.");
+            return;
+        }
+        if (parsedAmount > 100000) {
+            alert("Transaction amount exceeds maximum limit of $100,000.");
+            return;
+        }
+        if (merchant.trim().length < 2) {
+            alert("Merchant name must be at least 2 characters.");
+            return;
+        }
+        if (merchant.trim().length > 100) {
+            alert("Merchant name too long (max 100 characters).");
+            return;
+        }
+        if (location.trim().length < 2) {
+            alert("Location must be at least 2 characters.");
+            return;
+        }
+        if (location.trim().length > 100) {
+            alert("Location too long (max 100 characters).");
+            return;
+        }
+        
+        onSubmit({ 
+            amount: parsedAmount, 
+            merchant: merchant.trim(), 
+            location: location.trim() 
+        });
         setAmount('');
         setMerchant('');
         setLocation('');
@@ -69,19 +102,19 @@ const TransactionForm: React.FC<{
                 <label htmlFor="amount" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Amount ($)</label>
                 <input type="number" id="amount" value={amount} onChange={e => setAmount(e.target.value)}
                     className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                    placeholder="e.g., 49.99" required min="0.01" step="0.01" />
+                    placeholder="e.g., 49.99" required min="0.01" max="100000" step="0.01" />
             </div>
             <div>
                 <label htmlFor="merchant" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Merchant</label>
                 <input type="text" id="merchant" value={merchant} onChange={e => setMerchant(e.target.value)}
                     className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                    placeholder="e.g., Amazon, Starbucks" required />
+                    placeholder="e.g., Amazon, Starbucks" required minLength={2} maxLength={100} />
             </div>
             <div>
                 <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Location</label>
                 <input type="text" id="location" value={location} onChange={e => setLocation(e.target.value)}
                     className="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                    placeholder="e.g., New York, NY" required />
+                    placeholder="e.g., New York, NY" required minLength={2} maxLength={100} />
             </div>
             <button type="submit" disabled={isLoading}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-300 disabled:cursor-not-allowed">
