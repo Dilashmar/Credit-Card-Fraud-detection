@@ -70,12 +70,22 @@ const Dashboard: React.FC = () => {
     }, 1500); // Simulate network delay
   };
 
+  const handleUpdateTransaction = (id: string, newStatus: TransactionStatus, newReason: string) => {
+    setTransactions(prev => 
+      prev.map(txn => 
+        txn.id === id 
+          ? { ...txn, status: newStatus, reason: newReason } 
+          : txn
+      )
+    );
+  };
+
   const renderDashboardContent = () => {
     switch (user.role) {
       case UserRole.Admin:
         return <AdminDashboard transactions={transactions} />;
       case UserRole.Employee:
-        return <EmployeeDashboard transactions={transactions} />;
+        return <EmployeeDashboard transactions={transactions} onUpdateTransaction={handleUpdateTransaction} />;
       case UserRole.Customer:
         return (
           <CustomerDashboard
